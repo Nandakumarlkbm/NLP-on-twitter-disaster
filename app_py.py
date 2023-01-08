@@ -42,8 +42,9 @@ def url_remover(text):
   url_patterns = re.sub(r'''(?i)\b((?:https?://|www\d{0,3}[.]|[a-z0-9.\-]+[.][a-z]{2,4}/)(?:[^\s()<>]+|\(([^\s()<>]+|(\([^\s()<>]+\)))*\))+(?:\(([^\s()<>]+|(\([^\s()<>]+\)))*\)|[^\s`!()\[\]{};:'".,<>?«»“”‘’]))''', " ", text)
   return url_patterns
 
-wl = WordNetLemmatizer()
+
 def preprocessing(text,remove_emojis=True):
+   wl = WordNetLemmatizer()
   tweets = []
   for sentence in tqdm(text):
     sentence = sentence.lower() # converting the words to lower case
@@ -60,23 +61,23 @@ def preprocessing(text,remove_emojis=True):
     tweets.append(sentence1)
   return tweets
 
-x=pd.DataFrame(tweets)
+  x=pd.DataFrame(tweets)
 
-with open('tokenizer.pickle', 'rb') as handle:
+  with open('tokenizer.pickle', 'rb') as handle:
     tokenizer=pickle.load(handle)
 
-enc = tokenizer.texts_to_sequences([tweets])
+  enc = tokenizer.texts_to_sequences([tweets])
 
-X_pad_tokens = pad_sequences(enc, maxlen=27, padding='post')
+  X_pad_tokens = pad_sequences(enc, maxlen=27, padding='post')
 
-model = load_model('best_model_crawlembeddingconv1d.h5')
+  model = load_model('best_model_crawlembeddingconv1d.h5')
 
-y_pred = model.predict(X_pad_tokens)
+  y_pred = model.predict(X_pad_tokens)
 
-if y_pred>=0.5:
-  st.write("Tweet is related to disaster")
-else:
-  st.write("Tweet is not related to disaster")
+  if y_pred>=0.5:
+    st.write("Tweet is related to disaster")
+  else:
+    st.write("Tweet is not related to disaster")
 
 if st.button("Predict"):
        preprocessing(tweet)
