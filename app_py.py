@@ -65,11 +65,12 @@ def classifiertwitter(tweet):
       return tweets
 
     x=preprocessing(tweet)
+    x_updated=pd.DataFrame(x)
 
     with open('tokenizer.pkl', 'rb') as handle:
       tokenizer=pickle.load(handle)
 
-    enc = tokenizer.texts_to_sequences([x])
+    enc = tokenizer.texts_to_sequences(x_updated[0])
 
     X_pad_tokens = pad_sequences(enc, maxlen=27, padding='post')
 
