@@ -33,51 +33,53 @@ st.image(image="https://twitter.com/Twitter/photo")
 
 tweet = st.text_input(label="Enter the tweet you want to identify below:",value="", max_chars=None,placeholder="Enter your tweet here")
 
-def contractionfun(text):
-  expanded_words=[]
-  for word in text.split():
-    expanded_words.append(contractions.fix(word))
-  return '  '.join(expanded_words)
-def url_remover(text):
-  url_patterns = re.sub(r'''(?i)\b((?:https?://|www\d{0,3}[.]|[a-z0-9.\-]+[.][a-z]{2,4}/)(?:[^\s()<>]+|\(([^\s()<>]+|(\([^\s()<>]+\)))*\))+(?:\(([^\s()<>]+|(\([^\s()<>]+\)))*\)|[^\s`!()\[\]{};:'".,<>?«»“”‘’]))''', " ", text)
-  return url_patterns
 
 
-def preprocessing(text,remove_emojis=True):
-  wl = WordNetLemmatizer()
-  tweets = []
-  for sentence in tqdm(text):
-    sentence = sentence.lower() # converting the words to lower case
-    sentence =  url_remover(sentence) # removing the url from the sentence
-    sentence = re.sub(r'@w+',  '', sentence).strip() # removing the words starts with "@"
-    sentence = contractionfun(sentence)
-    sentence = re.sub("[^a-zA-Z0-9 ']", " ", sentence) # removing symbols
-    sentence = sentence.replace("'","")
-    if remove_emojis:
+
+
+def classifiertwitter(tweet):
+    print("Analysing tweet...")
+    def contractionfun(text):
+      expanded_words=[]
+      for word in text.split():
+      expanded_words.append(contractions.fix(word))
+      return '  '.join(expanded_words)
+    def url_remover(text):
+      url_patterns = re.sub(r'''(?i)\b((?:https?://|www\d{0,3}[.]|[a-z0-9.\-]+[.][a-z]{2,4}/)(?:[^\s()<>]+|\(([^\s()<>]+|(\([^\s()<>]+\)))*\))+(?:\(([^\s()<>]+|(\([^\s()<>]+\)))*\)|[^\s`!()\[\]{};:'".,<>?«»“”‘’]))''', " ", text)
+      return url_patterns
+    def preprocessing(sentence):  
+      wl = WordNetLemmatizer()
+      tweets = []
+      sentence = sentence.lower() # converting the words to lower case
+      sentence =  url_remover(sentence) # removing the url from the sentence
+      sentence = re.sub(r'@w+',  '', sentence).strip() # removing the words starts with "@"
+      sentence = contractionfun(sentence)
+      sentence = re.sub("[^a-zA-Z0-9 ']", " ", sentence) # removing symbols
+      sentence = sentence.replace("'","")
       sentence = sentence.encode('ascii', 'ignore').decode('utf8').strip()
-    sentence = sentence.split()
-    sentence1 = [wl.lemmatize(word) for word in sentence if word not in set(stopwords.words("english"))] #lemmatization and stopwords removal from tweets
-    sentence1 = " ".join(sentence1)
-    tweets.append(sentence1)
-  return tweets
+      sentence = sentence.split()
+      sentence1 = [wl.lemmatize(word) for word in sentence if word not in set(stopwords.words("english"))] #lemmatization and stopwords removal from tweets
+      sentence1 = " ".join(sentence1)
+      tweets.append(sentence1)
+      return tweets
 
-  x=pd.DataFrame(tweets)
+    x=preprocessing(tweet)
 
-  with open('tokenizer.pickle', 'rb') as handle:
-    tokenizer=pickle.load(handle)
+    with open('tokenizer.pickle', 'rb') as handle:
+      tokenizer=pickle.load(handle)
 
-  enc = tokenizer.texts_to_sequences([tweets])
+    enc = tokenizer.texts_to_sequences([x])
 
-  X_pad_tokens = pad_sequences(enc, maxlen=27, padding='post')
+    X_pad_tokens = pad_sequences(enc, maxlen=27, padding='post')
 
-  model = load_model('best_model_crawlembeddingconv1d.h5')
+    model = load_model('best_model_crawlembeddingconv1d.h5')
 
-  y_pred = model.predict(X_pad_tokens)
+    y_pred = model.predict(X_pad_tokens)
 
-  if y_pred>=0.5:
-    st.write("Tweet is related to disaster")
-  else:
-    st.write("Tweet is not related to disaster")
+    if y_pred>=0.5:
+      st.write("Tweet is related to disaster")
+    else:
+      st.write("Tweet is not related to disaster")
 
 if st.button("Predict"):
-       preprocessing(tweet)
+       classifiertwitter(tweet)
