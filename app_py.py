@@ -44,7 +44,7 @@ def url_remover(text):
 
 
 def preprocessing(text,remove_emojis=True):
-   wl = WordNetLemmatizer()
+  wl = WordNetLemmatizer()
   tweets = []
   for sentence in tqdm(text):
     sentence = sentence.lower() # converting the words to lower case
