@@ -12,7 +12,6 @@ import pandas as pd
 import numpy as np
 import pickle
 import re
-import nltk
 import string 
 nltk.download('stopwords')
 nltk.download('wordnet')
