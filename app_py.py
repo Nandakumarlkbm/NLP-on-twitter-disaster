@@ -66,7 +66,7 @@ def classifiertwitter(tweet):
 
     x=preprocessing(tweet)
 
-    with open('tokenizer.pickle', 'rb') as handle:
+    with open('tokenizer.pkl', 'rb') as handle:
       tokenizer=pickle.load(handle)
 
     enc = tokenizer.texts_to_sequences([x])
