@@ -24,6 +24,7 @@ from tensorflow.keras.models import Model
 from tensorflow.keras.preprocessing.text import Tokenizer
 from tensorflow.keras.preprocessing.sequence import pad_sequences
 from nltk.stem import WordNetLemmatizer
+from tensorflow.keras.models import load_model
 
 st.title("IDENTIFICATION OF TWEETS RELATED TO DISASTER AND THOSE NOT RELATED TO DISASTER")
 
