@@ -42,7 +42,7 @@ def classifiertwitter(tweet):
     def contractionfun(text):
       expanded_words=[]
       for word in text.split():
-      expanded_words.append(contractions.fix(word))
+        expanded_words.append(contractions.fix(word))
       return '  '.join(expanded_words)
     def url_remover(text):
       url_patterns = re.sub(r'''(?i)\b((?:https?://|www\d{0,3}[.]|[a-z0-9.\-]+[.][a-z]{2,4}/)(?:[^\s()<>]+|\(([^\s()<>]+|(\([^\s()<>]+\)))*\))+(?:\(([^\s()<>]+|(\([^\s()<>]+\)))*\)|[^\s`!()\[\]{};:'".,<>?«»“”‘’]))''', " ", text)
