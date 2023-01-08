@@ -72,7 +72,7 @@ def classifiertwitter(tweet):
 
     X_pad_tokens = pad_sequences(enc, maxlen=27, padding='post')
 
-    model = load_model('best_model_crawlembeddingconv1d.h5')
+    model = load_model('https://github.com/Nandakumarlkbm/NLP-on-twitter-disaster/blob/main/best_model_crawlembeddingconv1d.h5')
 
     y_pred = model.predict(X_pad_tokens)
 
