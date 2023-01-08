@@ -30,7 +30,7 @@ st.title("IDENTIFICATION OF TWEETS RELATED TO DISASTER AND THOSE NOT RELATED TO 
 
 st.write("You can enter your tweet below and the model trained on labeled tweet data provided by Kaggle can predict with above 80% accuracy whether the tweet is related to disaster or not")
 
-st.image(image="https://twitter.com/Twitter/photo")
+st.image(image="https://cdn.pixabay.com/photo/2016/11/22/06/47/twitter-1848505_960_720.png")
 
 tweet = st.text_input(label="Enter the tweet you want to identify below:",value="", max_chars=None,placeholder="Enter your tweet here")
 
